@@ -30,7 +30,7 @@ public class State {
             i += 1;
         }
         rt[j] = i;
-        if (oneCycle) return null;
+        if (oneCycle && rt[j] != this.total) return null;
         else return new State(this.total, rt);
     }
 
@@ -51,9 +51,8 @@ public class State {
     }
 
     public static void main(String[] args) {
-        State x = new State(6, new int[] {6});
-        while ((x = x.next()) != null) {
-            System.out.println(x);
-        }
+        State x = new State(6, new int[] {2, 2, 2});
+        System.out.println(x);
+        while ((x = x.next()) != null) System.out.println(x);
     }
 }

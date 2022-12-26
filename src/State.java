@@ -1,4 +1,5 @@
-
+import java.util.HashSet;
+import java.util.Set;
 
 public class State {
 
@@ -19,21 +20,29 @@ public class State {
         int[] rt = new int[this.total];
         int i = 0;
         int j = 0;
-        while (this.piles[i] > 0) {
+        boolean oneCycle = true;
+        while (i < this.total && this.piles[i] > 0) {
             if (this.piles[i] > 1) {
                 rt[j] = this.piles[i] - 1;
+                if (rt[j] != this.piles[j]) oneCycle = false;
                 j += 1;
             }
             i += 1;
         }
         rt[j] = i;
-        return new State(this.total, rt);
+        if (oneCycle) return null;
+        else return new State(this.total, rt);
+    }
+
+    public Set<State> prev() {
+        // TODO: compute the set of states whose next() operation return this state
+        return new HashSet<>();
     }
 
     public String toString() {
         StringBuilder rt = new StringBuilder();
         int i = 0;
-        while (this.piles[i] > 0) {
+        while (i < this.total && this.piles[i] > 0) {
             rt.append(this.piles[i]);
             rt.append(" ");
             i += 1;
@@ -42,8 +51,9 @@ public class State {
     }
 
     public static void main(String[] args) {
-        State x = new State(10, new int[] {1,2,3,4});
-        System.out.println(x);
-        System.out.println(x.next());
+        State x = new State(6, new int[] {6});
+        while ((x = x.next()) != null) {
+            System.out.println(x);
+        }
     }
 }

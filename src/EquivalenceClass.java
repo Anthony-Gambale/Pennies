@@ -41,11 +41,16 @@ public class EquivalenceClass {
         return new EquivalenceClass(rtn);
     }
 
+    public int total() {
+        int rt = 0;
+        for (int pile : this.piles.keySet())
+            rt += this.piles.get(pile) * pile;
+        return rt;
+    }
+
     public Set<EquivalenceClass> prev() {
         Set<EquivalenceClass> rt = new HashSet<>();
-        int this_total = 0;
-        for (int pile : this.piles.keySet())
-            this_total += this.piles.get(pile) * pile;
+        int this_total = this.total();
 
         for (int pile : this.piles.keySet()) {
             // test each pile size for the artificial pile
@@ -58,8 +63,7 @@ public class EquivalenceClass {
                 if (add_pile == pile) {
                     curr.put(add_pile + 1, amt - 1);
                     total += (add_pile + 1) * (amt - 1);
-                }
-                else {
+                } else {
                     curr.put(add_pile + 1, amt);
                     total += (add_pile + 1) * amt;
                 }
@@ -89,7 +93,14 @@ public class EquivalenceClass {
     public static void main(String[] args) {
         EquivalenceClass x = new EquivalenceClass(new int[] {1, 5});
         System.out.println(x);
-        while ((x = x.next()) != null)
-            System.out.println(x);
+//        while ((x = x.next()) != null)
+//            System.out.println(x);
+        for (EquivalenceClass y : x.prev()) {
+            System.out.print(y + " - ");
+            for (EquivalenceClass z : y.prev()) {
+                System.out.print(z + " ");
+            }
+            System.out.println();
+        }
     }
 }

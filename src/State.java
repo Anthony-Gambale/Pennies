@@ -52,7 +52,7 @@ public class State {
     }
 
     public static void main(String[] args) {
-        State x = new State(666, new int[] {333, 333});
+        State x = new State(1770, new int[] {885, 885});
         System.out.println(x);
         while ((x = x.next()) != null)
             System.out.println(x);

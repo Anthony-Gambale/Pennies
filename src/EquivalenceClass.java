@@ -60,7 +60,7 @@ public class EquivalenceClass {
     }
 
     public static void main(String[] args) {
-        EquivalenceClass x = new EquivalenceClass(new int[] {1,4,1});
+        EquivalenceClass x = new EquivalenceClass(new int[] {333, 333});
         System.out.println(x);
         while ((x = x.next()) != null)
             System.out.println(x);

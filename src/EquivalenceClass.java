@@ -52,25 +52,28 @@ public class EquivalenceClass {
         Set<EquivalenceClass> rt = new HashSet<>();
         int this_total = this.total();
 
-        for (int pile : this.piles.keySet()) {
+        for (int artificial_size : this.piles.keySet()) {
             // test each pile size for the artificial pile
             Map<Integer, Integer> curr = new HashMap<>();
             // add all piles + 1, except the artificial one
             // also count total number of pennies so far
             int total = 0;
-            for (int add_pile : this.piles.keySet()) {
-                int amt = this.piles.get(add_pile);
-                if (add_pile == pile) {
-                    curr.put(add_pile + 1, amt - 1);
-                    total += (add_pile + 1) * (amt - 1);
+            for (int add_size : this.piles.keySet()) {
+                int amt = this.piles.get(add_size);
+                if (add_size == artificial_size) {
+                    if (amt > 1) {
+                        curr.put(add_size + 1, amt - 1);
+                        total += (add_size + 1) * (amt - 1);
+                    }
                 } else {
-                    curr.put(add_pile + 1, amt);
-                    total += (add_pile + 1) * amt;
+                    curr.put(add_size + 1, amt);
+                    total += (add_size + 1) * amt;
                 }
             }
             // check total
             if (total <= this_total) {
-                curr.put(1, this_total - total); // meet the difference with size 1 piles
+                // meet the difference with size 1 piles
+                curr.put(1, this_total - total);
                 rt.add(new EquivalenceClass(curr));
             }
         }
@@ -91,16 +94,18 @@ public class EquivalenceClass {
     }
 
     public static void main(String[] args) {
-        EquivalenceClass x = new EquivalenceClass(new int[] {1, 5});
+        EquivalenceClass x = new EquivalenceClass(new int[] {1,2,3});
         System.out.println(x);
 //        while ((x = x.next()) != null)
 //            System.out.println(x);
         for (EquivalenceClass y : x.prev()) {
-            System.out.print(y + " - ");
+            System.out.println("  " + y);
             for (EquivalenceClass z : y.prev()) {
-                System.out.print(z + " ");
+                System.out.println("    " + z);
+                for (EquivalenceClass w : z.prev()) {
+                    System.out.println("      " + w);
+                }
             }
-            System.out.println();
         }
     }
 }

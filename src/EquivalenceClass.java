@@ -42,8 +42,35 @@ public class EquivalenceClass {
     }
 
     public Set<EquivalenceClass> prev() {
-        // TODO: compute the set of equivalence classes whose next() operation return this equivalence class
-        return new HashSet<>();
+        Set<EquivalenceClass> rt = new HashSet<>();
+        int this_total = 0;
+        for (int pile : this.piles.keySet())
+            this_total += this.piles.get(pile) * pile;
+
+        for (int pile : this.piles.keySet()) {
+            // test each pile size for the artificial pile
+            Map<Integer, Integer> curr = new HashMap<>();
+            // add all piles + 1, except the artificial one
+            // also count total number of pennies so far
+            int total = 0;
+            for (int add_pile : this.piles.keySet()) {
+                int amt = this.piles.get(add_pile);
+                if (add_pile == pile) {
+                    curr.put(add_pile + 1, amt - 1);
+                    total += (add_pile + 1) * (amt - 1);
+                }
+                else {
+                    curr.put(add_pile + 1, amt);
+                    total += (add_pile + 1) * amt;
+                }
+            }
+            // check total
+            if (total <= this_total) {
+                curr.put(1, this_total - total); // meet the difference with size 1 piles
+                rt.add(new EquivalenceClass(curr));
+            }
+        }
+        return rt;
     }
 
     public String toString() {
@@ -60,7 +87,7 @@ public class EquivalenceClass {
     }
 
     public static void main(String[] args) {
-        EquivalenceClass x = new EquivalenceClass(new int[] {885, 885});
+        EquivalenceClass x = new EquivalenceClass(new int[] {1, 5});
         System.out.println(x);
         while ((x = x.next()) != null)
             System.out.println(x);

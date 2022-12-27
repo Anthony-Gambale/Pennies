@@ -40,6 +40,7 @@ public class EquivalenceClass {
     }
 
     public Set<EquivalenceClass> prev() {
+        // TODO: compute the set of equivalence classes whose next() operation return this equivalence class
         return new HashSet<>();
     }
 

@@ -94,16 +94,27 @@ public class EquivalenceClass {
     }
 
     public static void main(String[] args) {
-        EquivalenceClass x = new EquivalenceClass(new int[] {1,2,3});
+        EquivalenceClass x = new EquivalenceClass(new int[] {5,5});
+
         System.out.println(x);
-//        while ((x = x.next()) != null)
-//            System.out.println(x);
+        while ((x = x.next()) != null)
+            System.out.println(x);
+
+        // TODO: make this nest of loops into a recursive function for printing the predecessor tree up to depth N
+        x = new EquivalenceClass(new int[] {1,2,3});
+        System.out.println("\n" + x);
         for (EquivalenceClass y : x.prev()) {
-            System.out.println("  " + y);
-            for (EquivalenceClass z : y.prev()) {
-                System.out.println("    " + z);
-                for (EquivalenceClass w : z.prev()) {
-                    System.out.println("      " + w);
+            if (!y.piles.equals(x.piles)) {
+                System.out.println("  " + y);
+                for (EquivalenceClass z : y.prev()) {
+                    if (!z.piles.equals(y.piles)) {
+                        System.out.println("    " + z);
+                        for (EquivalenceClass w : z.prev()) {
+                            if (!w.piles.equals(z.piles)) {
+                                System.out.println("      " + w);
+                            }
+                        }
+                    }
                 }
             }
         }

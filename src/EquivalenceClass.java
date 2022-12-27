@@ -22,28 +22,23 @@ public class EquivalenceClass {
         this.piles = initial;
     }
 
-    public boolean equals(EquivalenceClass other) {
-        return this.piles.equals(other.piles);
-    }
-
     public EquivalenceClass next() {
-        Map<Integer, Integer> rti = new HashMap<>();
+        Map<Integer, Integer> rtn = new HashMap<>();
         int npiles = 0;
 
         for (int pile : this.piles.keySet()) {
             if (pile > 1)
-                rti.put(pile - 1, this.piles.get(pile));
+                rtn.put(pile - 1, this.piles.get(pile));
             npiles += this.piles.get(pile);
         }
 
-        if (rti.containsKey(npiles))
-            rti.put(npiles, rti.get(npiles) + 1);
+        if (rtn.containsKey(npiles))
+            rtn.put(npiles, rtn.get(npiles) + 1);
         else
-            rti.put(npiles, 1);
+            rtn.put(npiles, 1);
 
-        EquivalenceClass rtn = new EquivalenceClass(rti);
-        if (this.equals(rtn)) return null;
-        return rtn;
+        if (this.piles.equals(rtn)) return null;
+        return new EquivalenceClass(rtn);
     }
 
     public Set<EquivalenceClass> prev() {

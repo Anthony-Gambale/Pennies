@@ -54,6 +54,7 @@ public class State {
     public static void main(String[] args) {
         State x = new State(6, new int[] {1,4,1});
         System.out.println(x);
-        while ((x = x.next()) != null) System.out.println(x);
+        while ((x = x.next()) != null)
+            System.out.println(x);
     }
 }

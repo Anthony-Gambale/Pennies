@@ -22,21 +22,28 @@ public class EquivalenceClass {
         this.piles = initial;
     }
 
-    // TODO: return null if the current equivalence class is a one-cycle
+    public boolean equals(EquivalenceClass other) {
+        return this.piles.equals(other.piles);
+    }
+
     public EquivalenceClass next() {
-        Map<Integer, Integer> rt = new HashMap<>();
+        Map<Integer, Integer> rti = new HashMap<>();
         int npiles = 0;
+
         for (int pile : this.piles.keySet()) {
-            if (pile > 1) {
-                rt.put(pile - 1, this.piles.get(pile));
-            }
+            if (pile > 1)
+                rti.put(pile - 1, this.piles.get(pile));
             npiles += this.piles.get(pile);
         }
-        if (rt.containsKey(npiles))
-            rt.put(npiles, rt.get(npiles) + 1);
+
+        if (rti.containsKey(npiles))
+            rti.put(npiles, rti.get(npiles) + 1);
         else
-            rt.put(npiles, 1);
-        return new EquivalenceClass(rt);
+            rti.put(npiles, 1);
+
+        EquivalenceClass rtn = new EquivalenceClass(rti);
+        if (this.equals(rtn)) return null;
+        return rtn;
     }
 
     public Set<EquivalenceClass> prev() {
@@ -58,8 +65,9 @@ public class EquivalenceClass {
     }
 
     public static void main(String[] args) {
-        EquivalenceClass x = new EquivalenceClass(new int[] {1,1,1,1,1,1});
+        EquivalenceClass x = new EquivalenceClass(new int[] {1,4,1});
         System.out.println(x);
-        for (int i = 0; i < 15; i++) System.out.println(x = x.next());
+        while ((x = x.next()) != null)
+            System.out.println(x);
     }
 }

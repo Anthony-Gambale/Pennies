@@ -5,49 +5,30 @@ class EquivalenceClassTest {
 
     @Test
     public void testAllQuick() {
-        // prev().next() should be the identity operation
-        // millions of cases, should take no longer than a minute
-        for (int i = 1; i < 15; i++) {
-            for (int j = 1; j < 15; j++) {
-                for (int k = 1; k < 15; k++) {
-                    testPrevHelper(new int[] {i,j,k,j,j,i});
-
-                    testTotalHelper(new int[] {i,j,k,j,j,i});
-
-                    testDoublePrevHelper(new int[] {i,j,k,j,j,i});
-                }
-            }
-        }
+        testHelper(15, 15, 15);
     }
 
     @Test
     public void testAllMedium() {
-        // prev().next() should be the identity operation
-        // millions of cases, should take no longer than a minute
-        for (int i = 1; i < 50; i++) {
-            for (int j = 1; j < 50; j++) {
-                for (int k = 1; k < 50; k++) {
-                    testPrevHelper(new int[] {i,j,k,k,j,j});
-
-                    testTotalHelper(new int[] {i,j,k,k,j,j});
-
-                    testDoublePrevHelper(new int[] {i,j,k,k,j,j});
-                }
-            }
-        }
+        testHelper(40, 50, 50);
     }
 
     @Test
     public void testAllDeep() {
-        // prev().next() should be the identity operation
-        // millions of cases, should take no longer than a minute
-        for (int i = 1; i < 90; i++) {
-            for (int j = 1; j < 90; j++) {
-                for (int k = 1; k < 90; k++) {
+        testHelper(90, 90, 90);
+    }
+
+    @Test
+    public void testAllExtremelyDeep() {
+        testHelper(120, 120, 120);
+    }
+
+    public void testHelper(int _i, int _j, int _k) {
+        for (int i = 1; i < _i; i++) {
+            for (int j = 1; j < _j; j++) {
+                for (int k = 1; k < _k; k++) {
                     testPrevHelper(new int[] {i,j,k,i,j,i,j});
-
                     testTotalHelper(new int[] {i,j,k,i,j,i,j});
-
                     testDoublePrevHelper(new int[] {i,j,k,i,j,i,j});
                 }
             }

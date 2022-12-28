@@ -101,7 +101,7 @@ public class EquivalenceClass {
     public void printPredecessorTreeHelper(int level, int curr_level) {
         if (curr_level == level) return;
         String whitespace = new String(new char[curr_level]).replace("\0", "|  ");
-        System.out.println(curr_level + " " + whitespace + this);
+        System.out.println(whitespace + this);
         for (EquivalenceClass x : this.prev())
             if (!x.piles.equals(this.piles))
                 x.printPredecessorTreeHelper(level, curr_level + 1);
@@ -115,7 +115,7 @@ public class EquivalenceClass {
             System.out.println(x);
 
         System.out.println();
-        x = new EquivalenceClass(new int[] {1,2,3});
-        x.printPredecessorTree(10);
+        x = new EquivalenceClass(new int[] {1,2,3,4});
+        x.printPredecessorTree(100);
     }
 }

@@ -94,6 +94,19 @@ public class EquivalenceClass {
         return rt.toString();
     }
 
+    public void printPredecessorTree(int level) {
+        this.printPredecessorTreeHelper(level, 0);
+    }
+
+    public void printPredecessorTreeHelper(int level, int curr_level) {
+        if (curr_level == level) return;
+        String whitespace = new String(new char[curr_level]).replace("\0", "|  ");
+        System.out.println(curr_level + " " + whitespace + this);
+        for (EquivalenceClass x : this.prev())
+            if (!x.piles.equals(this.piles))
+                x.printPredecessorTreeHelper(level, curr_level + 1);
+    }
+
     public static void main(String[] args) {
         EquivalenceClass x = new EquivalenceClass(new int[] {5,5});
 
@@ -101,23 +114,8 @@ public class EquivalenceClass {
         while ((x = x.next()) != null)
             System.out.println(x);
 
-        // TODO: make this nest of loops into a recursive function for printing the predecessor tree up to depth N
+        System.out.println();
         x = new EquivalenceClass(new int[] {1,2,3});
-        System.out.println("\n" + x);
-        for (EquivalenceClass y : x.prev()) {
-            if (!y.piles.equals(x.piles)) {
-                System.out.println("  " + y);
-                for (EquivalenceClass z : y.prev()) {
-                    if (!z.piles.equals(y.piles)) {
-                        System.out.println("    " + z);
-                        for (EquivalenceClass w : z.prev()) {
-                            if (!w.piles.equals(z.piles)) {
-                                System.out.println("      " + w);
-                            }
-                        }
-                    }
-                }
-            }
-        }
+        x.printPredecessorTree(10);
     }
 }

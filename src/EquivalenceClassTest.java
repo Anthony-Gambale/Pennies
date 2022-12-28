@@ -30,8 +30,28 @@ class EquivalenceClassTest {
                     testPrevHelper(new int[] {i,j,k,i,j,i,j});
                     testTotalHelper(new int[] {i,j,k,i,j,i,j});
                     testDoublePrevHelper(new int[] {i,j,k,i,j,i,j});
+                    testNonZeroHelper(new int[] {i,j,k,i,j,i,j});
                 }
             }
+        }
+    }
+
+    public void testNonZeroHelper(int[] arr) {
+        EquivalenceClass x = new EquivalenceClass(arr);
+        for (EquivalenceClass y : x.prev()) {
+            for (int pile : y.piles.keySet()) {
+                boolean valid = y.piles.get(pile) > 0;
+                assertTrue(valid, "Program says\n" + y
+                        + "\nis a predecessor of \n" + x
+                        + "\nbut its hashmap contains invalid amounts\n" + y.piles);
+            }
+        }
+        EquivalenceClass z = x.next();
+        for (int pile : z.piles.keySet()) {
+            boolean valid = z.piles.get(pile) > 0;
+            assertTrue(valid, "Program says\n" + z
+                    + "\nis a successor of \n" + x
+                    + "\nbut its hashmap contains invalid amounts\n" + z.piles);
         }
     }
 

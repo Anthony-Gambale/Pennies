@@ -73,7 +73,8 @@ public class EquivalenceClass {
             // check total
             if (total <= this_total) {
                 // meet the difference with size 1 piles
-                curr.put(1, this_total - total);
+                if (total < this_total)
+                    curr.put(1, this_total - total);
                 rt.add(new EquivalenceClass(curr));
             }
         }

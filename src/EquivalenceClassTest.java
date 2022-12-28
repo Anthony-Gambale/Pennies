@@ -9,8 +9,8 @@ class EquivalenceClassTest {
     }
 
     @Test
-    public void testAllDeep() {
-        testHelper(45, 120);
+    public void testAllLarge() {
+        testHelper(300, 330);
     }
 
     public void testHelper(int min, int max) {

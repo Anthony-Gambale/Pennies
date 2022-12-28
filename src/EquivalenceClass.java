@@ -100,7 +100,7 @@ public class EquivalenceClass {
 
     public void printPredecessorTreeHelper(int level, int curr_level) {
         if (curr_level == level) return;
-        String whitespace = new String(new char[curr_level]).replace("\0", "|  ");
+        String whitespace = new String(new char[curr_level]).replace("\0", "|   ");
         System.out.println(whitespace + this);
         for (EquivalenceClass x : this.prev())
             if (!x.piles.equals(this.piles))

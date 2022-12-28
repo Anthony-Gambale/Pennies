@@ -4,29 +4,19 @@ import static org.junit.jupiter.api.Assertions.*;
 class EquivalenceClassTest {
 
     @Test
-    public void testAllQuick() {
-        testHelper(15, 15, 15);
-    }
-
-    @Test
-    public void testAllMedium() {
-        testHelper(40, 50, 50);
+    public void testAll() {
+        testHelper(1, 45);
     }
 
     @Test
     public void testAllDeep() {
-        testHelper(90, 90, 90);
+        testHelper(45, 120);
     }
 
-    @Test
-    public void testAllExtremelyDeep() {
-        testHelper(120, 120, 120);
-    }
-
-    public void testHelper(int _i, int _j, int _k) {
-        for (int i = 1; i < _i; i++) {
-            for (int j = 1; j < _j; j++) {
-                for (int k = 1; k < _k; k++) {
+    public void testHelper(int min, int max) {
+        for (int i = min; i < max; i++) {
+            for (int j = min; j < max; j++) {
+                for (int k = min; k < max; k++) {
                     testPrevHelper(new int[] {i,j,k,i,j,i,j});
                     testTotalHelper(new int[] {i,j,k,i,j,i,j});
                     testDoublePrevHelper(new int[] {i,j,k,i,j,i,j});

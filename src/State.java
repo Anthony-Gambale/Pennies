@@ -1,60 +1,121 @@
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 public class State {
 
-    int[] piles;
-    int total;
+    // size of pile : number of piles of this size
+    Map<Integer, Integer> piles;
 
-    public State(int total, int[] initial) {
-        this.total = total;
-        if (initial.length == total) {
-            this.piles = initial;
-        } else {
-            this.piles = new int[total];
-            System.arraycopy(initial, 0, piles, 0, initial.length);
+    public State(int[] initial) {
+        this.piles = new HashMap<>();
+        for (int pile : initial) {
+            if (this.piles.containsKey(pile))
+                this.piles.put(pile, this.piles.get(pile) + 1); // increment
+            else
+                this.piles.put(pile, 1); // init
         }
+    }
+
+    public State(Map<Integer, Integer> initial) {
+        this.piles = initial;
     }
 
     public State next() {
-        int[] rt = new int[this.total];
-        int i = 0;
-        int j = 0;
-        boolean oneCycle = true;
-        while (i < this.total && this.piles[i] > 0) {
-            if (this.piles[i] > 1) {
-                rt[j] = this.piles[i] - 1;
-                if (rt[j] != this.piles[j]) oneCycle = false;
-                j += 1;
-            }
-            i += 1;
+        Map<Integer, Integer> rtn = new HashMap<>();
+        int npiles = 0;
+
+        for (int pile : this.piles.keySet()) {
+            if (pile > 1)
+                rtn.put(pile - 1, this.piles.get(pile));
+            npiles += this.piles.get(pile);
         }
-        rt[j] = i;
-        if (rt[j] != this.piles[j]) oneCycle = false;
-        if (oneCycle && rt[j] != this.total) return null;
-        else return new State(this.total, rt);
+
+        if (rtn.containsKey(npiles))
+            rtn.put(npiles, rtn.get(npiles) + 1);
+        else
+            rtn.put(npiles, 1);
+
+        if (this.piles.equals(rtn)) return null;
+        return new State(rtn);
+    }
+
+    public int total() {
+        int rt = 0;
+        for (int pile : this.piles.keySet())
+            rt += this.piles.get(pile) * pile;
+        return rt;
     }
 
     public Set<State> prev() {
-        // TODO: compute the set of states whose next() operation return this state
-        return new HashSet<>();
+        Set<State> rt = new HashSet<>();
+        int this_total = this.total();
+
+        for (int artificial_size : this.piles.keySet()) {
+            // test each pile size for the artificial pile
+            Map<Integer, Integer> curr = new HashMap<>();
+            // add all piles + 1, except the artificial one
+            // also count total number of pennies so far
+            int total = 0;
+            for (int add_size : this.piles.keySet()) {
+                int amt = this.piles.get(add_size);
+                if (add_size == artificial_size) {
+                    if (amt > 1) {
+                        curr.put(add_size + 1, amt - 1);
+                        total += (add_size + 1) * (amt - 1);
+                    }
+                } else {
+                    curr.put(add_size + 1, amt);
+                    total += (add_size + 1) * amt;
+                }
+            }
+            // check total
+            if (total <= this_total) {
+                // meet the difference with size 1 piles
+                if (total < this_total)
+                    curr.put(1, this_total - total);
+                rt.add(new State(curr));
+            }
+        }
+        return rt;
     }
 
     public String toString() {
         StringBuilder rt = new StringBuilder();
-        int i = 0;
-        while (i < this.total && this.piles[i] > 0) {
-            rt.append(this.piles[i]);
-            rt.append(" ");
-            i += 1;
+        rt.append("[ ");
+        for (int pile : this.piles.keySet()) {
+            for (int i = 0; i < this.piles.get(pile); i++) {
+                rt.append(pile);
+                rt.append(" ");
+            }
         }
+        rt.append("]");
         return rt.toString();
     }
 
+    public void printPredecessorTree(int level) {
+        this.printPredecessorTreeHelper(level, 0);
+    }
+
+    public void printPredecessorTreeHelper(int level, int curr_level) {
+        if (curr_level == level) return;
+        String whitespace = new String(new char[curr_level]).replace("\0", "|   ");
+        System.out.println(whitespace + this);
+        for (State x : this.prev())
+            if (!x.piles.equals(this.piles))
+                x.printPredecessorTreeHelper(level, curr_level + 1);
+    }
+
     public static void main(String[] args) {
-        State x = new State(1770, new int[] {885, 885});
+        State x = new State(new int[] {5,5});
+
         System.out.println(x);
         while ((x = x.next()) != null)
             System.out.println(x);
+
+        System.out.println();
+        x = new State(new int[] {1,2,3,4});
+        x.printPredecessorTree(100);
     }
 }

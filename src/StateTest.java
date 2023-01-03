@@ -1,7 +1,7 @@
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
-class EquivalenceClassTest {
+class StateTest {
 
     @Test
     public void testAll() {
@@ -27,8 +27,8 @@ class EquivalenceClassTest {
     }
 
     public void testNonZeroHelper(int[] arr) {
-        EquivalenceClass x = new EquivalenceClass(arr);
-        for (EquivalenceClass y : x.prev()) {
+        State x = new State(arr);
+        for (State y : x.prev()) {
             for (int pile : y.piles.keySet()) {
                 boolean valid = y.piles.get(pile) > 0;
                 assertTrue(valid, "Program says\n" + y
@@ -36,7 +36,7 @@ class EquivalenceClassTest {
                         + "\nbut its hashmap contains invalid amounts\n" + y.piles);
             }
         }
-        EquivalenceClass z = x.next();
+        State z = x.next();
         for (int pile : z.piles.keySet()) {
             boolean valid = z.piles.get(pile) > 0;
             assertTrue(valid, "Program says\n" + z
@@ -46,9 +46,9 @@ class EquivalenceClassTest {
     }
 
     public void testPrevHelper(int[] arr) {
-        EquivalenceClass x = new EquivalenceClass(arr);
-        for (EquivalenceClass y : x.prev()) {
-            EquivalenceClass z = y.next();
+        State x = new State(arr);
+        for (State y : x.prev()) {
+            State z = y.next();
             if (z != null)
                 assertEquals(z.piles, x.piles, "Broken case: program says\n" + y
                         + "\nis a predecessor class of\n" + x
@@ -57,13 +57,13 @@ class EquivalenceClassTest {
     }
 
     public void testTotalHelper(int[] arr) {
-        EquivalenceClass x = new EquivalenceClass(arr);
-        EquivalenceClass y = x.next();
+        State x = new State(arr);
+        State y = x.next();
         if (y != null)
             assertEquals(x.total(), y.total(), "Broken case: program says\n" + y
                     + "\nis a successor of\n" + x
                     + "\nbut they have a different total number of pennies.");
-        for (EquivalenceClass z : x.prev()) {
+        for (State z : x.prev()) {
             assertEquals(x.total(), z.total(), "Broken case: program says\n" + z
                     + "\nis a predecessor of\n" + x
                     + "\nbut they have a different total number of pennies.");
@@ -71,9 +71,9 @@ class EquivalenceClassTest {
     }
 
     public void testDoublePrevHelper(int[] arr) {
-        EquivalenceClass x = new EquivalenceClass(arr);
-        for (EquivalenceClass y : x.prev()) {
-            for (EquivalenceClass z : y.prev()) {
+        State x = new State(arr);
+        for (State y : x.prev()) {
+            for (State z : y.prev()) {
                 assertEquals(z.total(), x.total(), "Broken case: program says\n" + z
                         + "\nis a predecessor of a predecessor of\n" + x
                         + "\nbut they have a different total number of pennies. The intermediary state was\n" + y);

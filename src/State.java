@@ -100,7 +100,7 @@ public class State {
 
     public void printPredecessorTreeHelper(int level, int curr_level) {
         if (curr_level == level) return;
-        String whitespace = new String(new char[curr_level]).replace("\0", "|   ");
+        String whitespace = new String(new char[curr_level]).replace("\0", "|  ");
         System.out.println(whitespace + this);
         for (State x : this.prev())
             if (!x.piles.equals(this.piles))
@@ -115,7 +115,7 @@ public class State {
             System.out.println(x);
 
         System.out.println();
-        x = new State(new int[] {1,2,3,4});
+        x = new State(new int[] {1,2,3,4,5});
         x.printPredecessorTree(100);
     }
 }
